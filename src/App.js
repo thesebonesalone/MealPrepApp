@@ -4,6 +4,7 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import Signup from './Signup/Signup';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+
 function App() {
   return (
     <div className="App">
@@ -21,3 +22,4 @@ function App() {
 }
 
 export default App;
+export const site = "http://localhost:5000"
