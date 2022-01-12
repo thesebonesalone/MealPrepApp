@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { site } from "../../site";
+import jwt_decode from "jwt-decode";
 
 
 function Signup(props) {
@@ -33,6 +34,23 @@ function Signup(props) {
         setPassConfirm(val)
     }
 
+    function login() {
+        let data = {username: username, password: password}
+        let awt = {method: "POST", headers: {"Content-Type": "application/json"},body: JSON.stringify(data)}
+        fetch(site + "/auth",awt)
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(resp.message)
+            if (resp.message == "Success")
+            {
+                console.log(jwt_decode(resp.token))
+                localStorage.setItem('AUTH_TOKEN',resp.token)
+                props.login()
+            }
+            
+        }) 
+    }
+
     function handleSubmit(e) {
         e.preventDefault()
         if (!passMatch)
@@ -46,6 +64,12 @@ function Signup(props) {
         .then(resp => resp.json())
         .then(resp => {
             console.log(resp)
+            if (resp.message == "Success")
+            {
+                login()
+            } else {
+                console.log("error")
+            }
         })
 
         //check that passwords match
