@@ -1,0 +1,11 @@
+//custom theme colors
+$theme-colors: (
+  "primary": #255F85,
+  "danger": #ff4136,
+  "secondary": #e9724c,
+  "dark": #481d24,
+  "light": #ffc857
+);
+
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss"
