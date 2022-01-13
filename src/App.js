@@ -1,6 +1,7 @@
-import logo from './logo.svg';
+
 import login_icon from './Icons/login_icon.png'
 import profile_icon from './Icons/profile_icon.png'
+import hamburger_icon from './Icons/Hamburger_Icon.png'
 import './App.css';
 import React, {useState, useEffect} from 'react'
 import { Button, Container, Modal, Nav, Navbar, Row, Card} from 'react-bootstrap';
@@ -72,7 +73,8 @@ function App() {
     <div className="App">
       <Navbar expand="lg" variant="light" bg="primary">
         <Container>
-          <Navbar.Brand>minMACROS</Navbar.Brand>
+          
+          <Navbar.Brand textColor='#000000'><img src = {hamburger_icon} width="30" height="30"/>minMACROS</Navbar.Brand>
           <Navbar.Brand>
             {user != null ? 
             <Button type="dark" onClick={handleLogOut}>Logout</Button> :
