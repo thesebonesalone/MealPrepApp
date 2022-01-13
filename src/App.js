@@ -3,15 +3,17 @@ import login_icon from './Icons/login_icon.png'
 import profile_icon from './Icons/profile_icon.png'
 import './App.css';
 import React, {useState, useEffect} from 'react'
-import { Button, Container, Modal, Nav, Navbar } from 'react-bootstrap';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Button, Container, Modal, Nav, Navbar, Row, Card} from 'react-bootstrap';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Signup from './pages/Signup/Signup.js';
 import Login from './pages/Login/Login';
 import { site } from './site';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './scss/custom.scss';
 import jwt_decode from "jwt-decode";
-
+import ProfileGlance from './pages/ProfileGlance';
+import RecipePage from './pages/Recipe/RecipePage';
+import RecipesNew from './pages/Recipe/Sorts/RecipesNew';
 
 function App() {
 
@@ -70,19 +72,19 @@ function App() {
     <div className="App">
       <Navbar expand="lg" variant="light" bg="primary">
         <Container>
-          <Navbar.Brand href="#">minMACROS</Navbar.Brand>
-          <Navbar.Brand>
-            
-          </Navbar.Brand>
+          <Navbar.Brand>minMACROS</Navbar.Brand>
           <Navbar.Brand>
             {user != null ? 
-            <Button type="secondary" onClick={handleLogOut}>Logout</Button> :
-            <Button type="secondary" onClick={openSignUp}>Sign Up</Button>
+            <Button type="dark" onClick={handleLogOut}>Logout</Button> :
+            <Button type="dark" onClick={openSignUp}>Sign Up</Button>
             }
             {user != null ? <img src = {profile_icon} width="30" height="30" /> : <img src = {login_icon} width="30" height="30"  onClick={openLogin}/>}
           </Navbar.Brand>
         </Container>
       </Navbar>
+      <Container>
+        {user != null ? <ProfileGlance user={user} /> : null}
+      </Container>
       <Modal show={showLogin} onHide={closeLogin}>
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
@@ -99,10 +101,15 @@ function App() {
           <Signup login={() => handleLogin()}/>
         </Modal.Body>
       </Modal>
-      <BrowserRouter>
+     
+      <Router>
         <Routes>
+          <Route path="recipes" element={<RecipePage/>}>
+            
+          </Route>
         </Routes>
-      </BrowserRouter>
+          
+      </Router>
     </div>
   );
 }
