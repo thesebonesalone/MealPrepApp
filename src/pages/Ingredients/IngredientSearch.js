@@ -6,7 +6,7 @@ import IngredientMicroView from "./IngredientMicroView";
 function IngredientSearch(props)
 {
     const [query, setQuery] = useState("")
-    const [list, setList] = useState([{name: "test"}])
+    const [list, setList] = useState([])
 
     function search()
     {

@@ -106,7 +106,7 @@ function App() {
      
       <Router>
         <Routes>
-          <Route path="recipes" element={<RecipePage/>}>
+          <Route path="recipes" element={<RecipePage user={user}/>}>
             
           </Route>
         </Routes>
