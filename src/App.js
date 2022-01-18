@@ -74,7 +74,7 @@ function App() {
       <Navbar expand="lg" variant="light" bg="primary">
         <Container>
           
-          <Navbar.Brand textColor='#000000'><img src = {hamburger_icon} width="30" height="30"/>minMACROS</Navbar.Brand>
+          <Navbar.Brand><img src = {hamburger_icon} width="30" height="30"/>minMACROS</Navbar.Brand>
           <Navbar.Brand>
             {user != null ? 
             <Button type="dark" onClick={handleLogOut}>Logout</Button> :

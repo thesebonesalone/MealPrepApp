@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function Recipe(props) {
+function RecipeGlance(props) {
 
     return (
         <div>
@@ -11,4 +11,4 @@ function Recipe(props) {
 
 }
 
-export default Recipe
+export default RecipeGlance

@@ -13,11 +13,13 @@ const Login = (props) => {
     function handleUsername(e) {
         var val = e.target.value
         setUsername(val)
+        setShowAlert(false)
     }
 
     function handlePassword(e) {
         var val = e.target.value
         setPassword(val)
+        setShowAlert(false)
     }
     function handleSubmit(e) {
         e.preventDefault()
@@ -34,6 +36,7 @@ const Login = (props) => {
                 props.login()
             } else {
                 setShowAlert(true)
+                setPassword("")
             }
             
         }) 

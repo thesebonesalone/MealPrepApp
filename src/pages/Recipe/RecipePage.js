@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Col, Container, Form, Nav, Row, Tabs, Tab, Button, Modal } from "react-bootstrap";
+import { Col, Container, Form, Nav, Row, Tabs, Tab, Button, Modal, Card } from "react-bootstrap";
 import RecipesNew from "./Sorts/RecipesNew";
 import filter_icon from '../../Icons/Filter_Icon.png'
 import IngredientForm from "../Ingredients/IngredientForm";
@@ -7,15 +7,29 @@ import IngredientSearch from "../Ingredients/IngredientSearch";
 import IngredientMicroView from "../Ingredients/IngredientMicroView";
 import { site } from "../../site";
 import jwt_decode from "jwt-decode"
+import Recipe from "./Recipe";
+import RecipeGlance from "./RecipeGlance";
+import InstructionForm from "../Instructions/InstructionForm";
 
 function RecipePage(props) {
     const [query, setQuery] = useState("")
     const [ingredients, setIngredients] = useState([])
-    const [instruction, setInstructions] = useState([])
+    const [instructions, setInstructions] = useState([])
     const [name, setName] = useState("")
+    const [list, setList] = useState([])
 
     const [showIngredient,setShowIngredient] = useState(false)
     const [showIgSearch, setShowIgSearch] = useState(false)
+
+    useEffect(() => {
+        fetch(site + "/recipe/get/new")
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(resp)
+            setList(resp.recipes)
+        })
+
+    },[])
 
     function closeIgSearch()
     {
@@ -33,6 +47,12 @@ function RecipePage(props) {
         setIngredients([...ingredients, item])
     }
 
+    function addInstruction(item)
+    {  
+        console.log("test")
+        setInstructions([...instructions, item])
+    }
+
     function handleName(e)
     {
         setName(e.target.value)
@@ -48,18 +68,16 @@ function RecipePage(props) {
         let recipe = {name: name
 
         }
-        let data = {recipe: recipe, ingredients: ingredients, user_id: props.user.id}
+        let data = {recipe: recipe, ingredients: ingredients, instructions: instructions, user_id: props.user.id}
         console.log(data)
         let awt = {method: "POST", headers: {"Content-Type": "application/json"},body: JSON.stringify(data)}
         fetch(site + "/recipe",awt)
         .then(resp => resp.json())
         .then(resp => {
             console.log(resp.message)
-            if (resp.message == "Success")
+            if (resp.message === "Success")
             {
-                console.log(jwt_decode(resp.token))
-                localStorage.setItem('AUTH_TOKEN',resp.token)
-                props.login()
+                console.log(resp.recipe)
             }
             
         }) 
@@ -75,6 +93,13 @@ function RecipePage(props) {
             <Tabs>
                 <Tab eventKey="results" title="Results">
                     Results
+                    <Container>
+                        {list.map(item => {
+                            return (
+                                <RecipeGlance key={item.id} recipe={item}/>
+                            )
+                        })}
+                    </Container>
                 </Tab>
                 <Tab eventKey="filter" title="Filters">
                     Filters
@@ -136,14 +161,14 @@ function RecipePage(props) {
                             <Form.Control value={name} onChange={handleName} placeholder="Recipe Name"></Form.Control>
                             <Button variant="primary" onClick={() => setShowIgSearch(true)}>Add Ingredient</Button>
                             <Button variant="secondary" onClick={() => setShowIngredient(true)}>New Ingredient</Button>
-                            {ingredients.map((item) => {return (
-                            <Container id={item.index}>
+                            {ingredients.map((item, index) => {return (
+                            <Container>
                                 <Row>
                                     <Col xs={1}>
                                         <Button variant="danger">X</Button>
                                     </Col>
                                     <Col xs={11}>
-                                        <IngredientMicroView ig={item}/>
+                                        <IngredientMicroView key={index} ig={item}/>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -156,7 +181,27 @@ function RecipePage(props) {
                             </Container>
                             )})}
                         <Button type="submit">Submit</Button>
+                        <Card>
+                            
+                            Instructions
+                            {instructions.map((item, index) => {
+                                let bg = (index%2 == 0 ? "lightgray" : "white")
+                                return (
+                                    <Card.Body
+                                    style={{
+                                        backgroundColor: bg
+                                    }}
+                                    key={index}>
+                                        {index + 1}: {item}
+                                    </Card.Body>
+                                )
+                            })}
+                            
+                        </Card>
+                        
                         </Form>
+                        <br/>
+                        <InstructionForm addInstruction={(item) => addInstruction(item)}></InstructionForm>
                     </Container>
                     
                 </Tab>

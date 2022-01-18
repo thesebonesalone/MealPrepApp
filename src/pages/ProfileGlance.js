@@ -2,13 +2,13 @@ import { render } from '@testing-library/react'
 import React, { useEffect, useState } from 'react'
 import { Card, Container, Row, Col } from 'react-bootstrap'
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react-dom'
-import { site } from '../site'
+import { capitalize, site } from '../site'
 
 
 function ProfileGlance(props) {
     const [user,setUser] = useState(null)
     useEffect(() => {
-        fetch(site + "/user/goals/" + props.user.id)
+        fetch(site + "/user/goals/" + props.user.username)
         .then(resp => resp.json())
         .then(resp => {
             setUser(resp.user)
@@ -16,7 +16,7 @@ function ProfileGlance(props) {
     },[])
     return(
         <Card>
-            <Card.Title>{props.user.username} At a Glance</Card.Title>
+            <Card.Title>{capitalize(props.user.username)} At a Glance</Card.Title>
             <Card.Body>
                 <Container>
                     <Row>
