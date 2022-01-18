@@ -2,7 +2,8 @@ import { render } from '@testing-library/react'
 import React, { useEffect, useState } from 'react'
 import { Card, Container, Row, Col } from 'react-bootstrap'
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react-dom'
-import { capitalize, site } from '../site'
+import { capitalize} from '../basic_functions'
+import { site } from '../site'
 
 
 function ProfileGlance(props) {

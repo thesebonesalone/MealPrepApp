@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Col, Container, Form, Nav, Row, Tabs, Tab, Button, Modal, Card } from "react-bootstrap";
+import { Col, Container, Form, Nav, Row, Tabs, Tab, Button, Modal, Card, CloseButton } from "react-bootstrap";
 import RecipesNew from "./Sorts/RecipesNew";
 import filter_icon from '../../Icons/Filter_Icon.png'
 import IngredientForm from "../Ingredients/IngredientForm";
@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode"
 import Recipe from "./Recipe";
 import RecipeGlance from "./RecipeGlance";
 import InstructionForm from "../Instructions/InstructionForm";
+import { remove_by_index } from "../../basic_functions";
 
 function RecipePage(props) {
     const [query, setQuery] = useState("")
@@ -62,12 +63,31 @@ function RecipePage(props) {
     {
         setQuery(e.value)
     }
+
+    function deleteIngredient(ind)
+    {
+        
+        setIngredients(ingredients.filter((item,index) => index !== ind ))
+    }
+
+    function deleteInstruction(ind)
+    {
+        
+        setInstructions(instructions.filter((item,index) => index !== ind ))
+    }
     function submitRecipe(e)
     {
         e.preventDefault()
-        let recipe = {name: name
-
+        if (ingredients.length === 0)
+        {
+            return null
         }
+        if (instructions.length === 0)
+        {
+            return null
+        }
+
+        let recipe = {name: name}
         let data = {recipe: recipe, ingredients: ingredients, instructions: instructions, user_id: props.user.id}
         console.log(data)
         let awt = {method: "POST", headers: {"Content-Type": "application/json"},body: JSON.stringify(data)}
@@ -165,33 +185,38 @@ function RecipePage(props) {
                             <Container>
                                 <Row>
                                     <Col xs={1}>
-                                        <Button variant="danger">X</Button>
+                                        <CloseButton variant="danger" onClick={() => deleteIngredient(index)}/>
                                     </Col>
                                     <Col xs={11}>
                                         <IngredientMicroView key={index} ig={item}/>
+                                        
                                     </Col>
                                 </Row>
-                                <Row>
-                                    
-                                    <Col>
-                                        Serving Size: {item.serving_type ? "" + item.serving_size + " mls" : "" + item.serving_size + " grams"}
-                                    </Col>
-                                    
-                                </Row>
+                                <Card.Body>
+                                    <Row>
+                                            <Col>
+                                                Serving Size: {item.serving_type ? "" + item.serving_size + " mls" : "" + item.serving_size + " grams"}
+                                            </Col>
+                                            <Col>
+                                                <Form.Control placeholder="Servings"/>
+                                            </Col>
+                                    </Row>
+                                </Card.Body>
                             </Container>
                             )})}
-                        <Button type="submit">Submit</Button>
+                        
                         <Card>
                             
                             Instructions
                             {instructions.map((item, index) => {
-                                let bg = (index%2 == 0 ? "lightgray" : "white")
+                                let bg = (index%2 === 0 ? "lightgray" : "white")
                                 return (
                                     <Card.Body
                                     style={{
                                         backgroundColor: bg
                                     }}
                                     key={index}>
+                                        <CloseButton variant="danger" onClick={() => deleteInstruction(index)}/>
                                         {index + 1}: {item}
                                     </Card.Body>
                                 )
@@ -202,6 +227,8 @@ function RecipePage(props) {
                         </Form>
                         <br/>
                         <InstructionForm addInstruction={(item) => addInstruction(item)}></InstructionForm>
+                        <br/>
+                        <Button type="submit">Submit</Button>
                     </Container>
                     
                 </Tab>
